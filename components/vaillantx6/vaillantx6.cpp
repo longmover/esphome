@@ -67,7 +67,35 @@ void VaillantX6Component::update() {
     if (val >= 0)
       return_temp_->publish_state(val);
   }
-
+  
+  // New sensors:
+  if (burner_modulation_) {
+    int val = getParm(burner_modulation_cmd, sizeof(burner_modulation_cmd));
+    ESP_LOGD(TAG, "Burner Modulation raw value: %d", val);
+    if (val >= 0)
+      burner_modulation_->publish_state(val);
+  }
+  
+  if (ch_pump_speed_) {
+    int val = getParm(ch_pump_speed_cmd, sizeof(ch_pump_speed_cmd));
+    ESP_LOGD(TAG, "CH Pump Speed raw value: %d", val);
+    if (val >= 0)
+      ch_pump_speed_->publish_state(val);
+  }
+  
+  if (gas_consumption_) {
+    int val = getParm(gas_consumption_cmd, sizeof(gas_consumption_cmd));
+    ESP_LOGD(TAG, "Gas Consumption raw value: %d", val);
+    if (val >= 0)
+      gas_consumption_->publish_state(val);
+  }
+  
+  if (gas_flow_rate_) {
+    int val = getParm(gas_flow_rate_cmd, sizeof(gas_flow_rate_cmd));
+    ESP_LOGD(TAG, "Gas Flow Rate raw value: %d", val);
+    if (val >= 0)
+      gas_flow_rate_->publish_state(val);
+  }
 }
 
 void VaillantX6Component::dump_config() {
@@ -79,6 +107,10 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Burner Modulation Sensor: %s", (burner_modulation_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  CH Pump Speed Sensor: %s", (ch_pump_speed_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Gas Consumption Sensor: %s", (gas_consumption_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Gas Flow Rate Sensor: %s", (gas_flow_rate_ ? "configured" : "not configured"));
 }
 
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
@@ -128,6 +160,7 @@ std::string VaillantX6Component::getBoilerStatusString(int status) {
     return "Unknown State";
 }
 
+// Setters for original sensor pointers
 void VaillantX6Component::set_hot_water(binary_sensor::BinarySensor *sensor) {
   hot_water_ = sensor;
 }
@@ -148,6 +181,20 @@ void VaillantX6Component::set_flow_temp_actual(sensor::Sensor *sensor) {
 }
 void VaillantX6Component::set_return_temp(sensor::Sensor *sensor) {
   return_temp_ = sensor;
+}
+
+// Setters for new sensor pointers
+void VaillantX6Component::set_burner_modulation(sensor::Sensor *sensor) {
+  burner_modulation_ = sensor;
+}
+void VaillantX6Component::set_ch_pump_speed(sensor::Sensor *sensor) {
+  ch_pump_speed_ = sensor;
+}
+void VaillantX6Component::set_gas_consumption(sensor::Sensor *sensor) {
+  gas_consumption_ = sensor;
+}
+void VaillantX6Component::set_gas_flow_rate(sensor::Sensor *sensor) {
+  gas_flow_rate_ = sensor;
 }
 
 }  // namespace vaillantx6
