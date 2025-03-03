@@ -3,8 +3,14 @@ import esphome.config_validation as cv
 from esphome.const import CONF_ID, CONF_UART_ID
 from esphome.components import uart, binary_sensor, sensor, text_sensor
 
+# Ensure that these components are loaded before our component.
+DEPENDENCIES = ["binary_sensor", "sensor", "text_sensor"]
+AUTO_LOAD = ["binary_sensor", "sensor", "text_sensor"]
+
 vaillantx6_ns = cg.esphome_ns.namespace("vaillantx6")
-VaillantX6Component = vaillantx6_ns.class_("VaillantX6Component", cg.PollingComponent, uart.UARTDevice)
+VaillantX6Component = vaillantx6_ns.class_(
+    "VaillantX6Component", cg.PollingComponent, uart.UARTDevice
+)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(VaillantX6Component),
@@ -22,10 +28,11 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)
-    cg.add(var.set_hot_water(config["hot_water"]))
-    cg.add(var.set_central_heating_set_temp(config["central_heating_set_temp"]))
-    cg.add(var.set_hot_water_temp(config["hot_water_temp"]))
-    cg.add(var.set_boiler_status(config["boiler_status"]))
-    cg.add(var.set_flow_temp_set(config["flow_temp_set"]))
-    cg.add(var.set_flow_temp_actual(config["flow_temp_actual"]))
-    cg.add(var.set_return_temp(config["return_temp"]))
+    # Use cg.id_() to resolve the sensor IDs.
+    cg.add(var.set_hot_water(cg.id_(config["hot_water"])))
+    cg.add(var.set_central_heating_set_temp(cg.id_(config["central_heating_set_temp"])))
+    cg.add(var.set_hot_water_temp(cg.id_(config["hot_water_temp"])))
+    cg.add(var.set_boiler_status(cg.id_(config["boiler_status"])))
+    cg.add(var.set_flow_temp_set(cg.id_(config["flow_temp_set"])))
+    cg.add(var.set_flow_temp_actual(cg.id_(config["flow_temp_actual"])))
+    cg.add(var.set_return_temp(cg.id_(config["return_temp"])))
