@@ -95,7 +95,6 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  CH Pump Speed Sensor: %s", (ch_pump_speed_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Gas Flow Rate Sensor: %s", (gas_flow_rate_ ? "configured" : "not configured"));
 }
 
@@ -167,14 +166,6 @@ void VaillantX6Component::set_flow_temp_actual(sensor::Sensor *sensor) {
 }
 void VaillantX6Component::set_return_temp(sensor::Sensor *sensor) {
   return_temp_ = sensor;
-}
-
-// Setters for new sensor pointers
-void VaillantX6Component::set_ch_pump_speed(sensor::Sensor *sensor) {
-  ch_pump_speed_ = sensor;
-}
-void VaillantX6Component::set_gas_flow_rate(sensor::Sensor *sensor) {
-  gas_flow_rate_ = sensor;
 }
 
 }  // namespace vaillantx6

@@ -19,8 +19,6 @@ CONFIG_SCHEMA = cv.Schema({
   cv.Required("flow_temp_set"): cv.use_id(sensor.Sensor),
   cv.Required("flow_temp_actual"): cv.use_id(sensor.Sensor),
   cv.Required("return_temp"): cv.use_id(sensor.Sensor),
-  cv.Required("ch_pump_speed"): cv.use_id(sensor.Sensor),
-  cv.Required("gas_flow_rate"): cv.use_id(sensor.Sensor),
 }).extend(cv.polling_component_schema("2000ms")).extend(uart.UART_DEVICE_SCHEMA)
 
 async def to_code(config):
@@ -34,5 +32,3 @@ async def to_code(config):
   cg.add(var.set_flow_temp_set(await cg.get_variable(config["flow_temp_set"])))
   cg.add(var.set_flow_temp_actual(await cg.get_variable(config["flow_temp_actual"])))
   cg.add(var.set_return_temp(await cg.get_variable(config["return_temp"])))
-  cg.add(var.set_ch_pump_speed(await cg.get_variable(config["ch_pump_speed"])))
-  cg.add(var.set_gas_flow_rate(await cg.get_variable(config["gas_flow_rate"])))
