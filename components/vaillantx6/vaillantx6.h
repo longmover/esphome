@@ -59,9 +59,7 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
   uint8_t returnTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x98, 0x00, 0xC9};        // Return Temp
 
   // New command arrays (example values)
-  uint8_t burner_modulation_cmd[7] = {0x07, 0x00, 0x00, 0x00, 0x16, 0x04, 0xD1}; // Burner Modulation
   uint8_t ch_pump_speed_cmd[7] = {0x07, 0x00, 0x00, 0x00, 0x15, 0x01, 0xD5};     // CH Pump Speed
-  uint8_t gas_consumption_cmd[7] = {0x07, 0x00, 0x00, 0x00, 0x20, 0x01, 0xA0};     // Gas Consumption
   uint8_t gas_flow_rate_cmd[7] = {0x07, 0x00, 0x00, 0x00, 0x21, 0x01, 0xA1};      // Gas Flow Rate
 
   // Helper function to send a command and get a parameter value
