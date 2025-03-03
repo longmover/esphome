@@ -47,26 +47,33 @@ void VaillantX6Component::update() {
     }
   }
   
-  if (flow_temp_set_) {
+  if (flowTempSet) {
     int val = getParm(flowTempSet, sizeof(flowTempSet));
     ESP_LOGD(TAG, "Flow Temp Set raw value: %d", val);
     if (val >= 0)
       flow_temp_set_->publish_state(val);
   }
   
-  if (flow_temp_actual_) {
+  if (flowTempActual) {
     int val = getParm(flowTempActual, sizeof(flowTempActual));
     ESP_LOGD(TAG, "Flow Temp Actual raw value: %d", val);
     if (val >= 0)
       flow_temp_actual_->publish_state(val);
   }
   
-  if (return_temp_) {
+  if (returnTemp) {
     int val = getParm(returnTemp, sizeof(returnTemp));
     ESP_LOGD(TAG, "Return Temp raw value: %d", val);
     if (val >= 0)
       return_temp_->publish_state(val);
   }
+
+  // Additional read commands—here we simply log their raw values.
+  update_burner_modulation();
+  update_ch_pump_speed();
+  update_gas_consumption();
+  update_boiler_pressure();
+  update_operating_hours();
 }
 
 void VaillantX6Component::dump_config() {
@@ -80,6 +87,7 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ != nullptr ? "configured" : "not configured"));
 }
 
+// Helper function to send a command and get a parameter value.
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
   write_array(cmd, lcmd);
   unsigned long start_time = millis();
@@ -100,6 +108,7 @@ int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
   }
 }
 
+// Helper: Convert boiler status code to string.
 std::string VaillantX6Component::getBoilerStatusString(int status) {
   std::map<int, std::string> boiler_status_map = {
       {17, "Pump Running"},
@@ -126,6 +135,40 @@ std::string VaillantX6Component::getBoilerStatusString(int status) {
   else
     return "Unknown State";
 }
+
+// --- Additional update functions for new read commands ---
+
+void VaillantX6Component::update_burner_modulation() {
+  int val = getParm(burner_modulation, sizeof(burner_modulation));
+  ESP_LOGD(TAG, "Burner Modulation raw value: %d", val);
+  // Optionally publish to a sensor if implemented.
+}
+
+void VaillantX6Component::update_ch_pump_speed() {
+  int val = getParm(ch_pump_speed, sizeof(ch_pump_speed));
+  ESP_LOGD(TAG, "CH Pump Speed raw value: %d", val);
+  // Optionally publish to a sensor if implemented.
+}
+
+void VaillantX6Component::update_gas_consumption() {
+  int val = getParm(gas_consumption, sizeof(gas_consumption));
+  ESP_LOGD(TAG, "Gas Consumption raw value: %d", val);
+  // Optionally publish to a sensor if implemented.
+}
+
+void VaillantX6Component::update_boiler_pressure() {
+  int val = getParm(boiler_pressure, sizeof(boiler_pressure));
+  ESP_LOGD(TAG, "Boiler Pressure raw value: %d", val);
+  // Optionally publish to a sensor if implemented.
+}
+
+void VaillantX6Component::update_operating_hours() {
+  int val = getParm(operating_hours, sizeof(operating_hours));
+  ESP_LOGD(TAG, "Operating Hours raw value: %d", val);
+  // Optionally publish to a sensor if implemented.
+}
+
+// --- Setters for sensor pointers ---
 
 void VaillantX6Component::set_hot_water(binary_sensor::BinarySensor *sensor) {
   hot_water_ = sensor;
