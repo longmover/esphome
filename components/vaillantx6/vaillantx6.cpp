@@ -44,6 +44,12 @@ void VaillantX6Component::update() {
       std::string status_str = getBoilerStatusString(val);
       ESP_LOGD(TAG, "Boiler status string: %s", status_str.c_str());
       boiler_status_->publish_state(status_str.c_str());
+
+      // New: Update Burner Status based on boiler status value.
+      if (burner_state_) {
+        // Burner is on if the value equals 65 or 225.
+        burner_state_->publish_state((val == 65 || val == 225));
+      }
     }
   }
   
@@ -79,6 +85,7 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Burner Status Sensor: %s", (burner_state_ ? "configured" : "not configured"));
 }
 
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
@@ -150,6 +157,8 @@ void VaillantX6Component::set_flow_temp_actual(sensor::Sensor *sensor) {
 void VaillantX6Component::set_return_temp(sensor::Sensor *sensor) {
   return_temp_ = sensor;
 }
-
+void VaillantX6Component::set_burner_state(binary_sensor::BinarySensor *sensor) {
+  burner_state_ = sensor;
+}
 }  // namespace vaillantx6
 }  // namespace esphome

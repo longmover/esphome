@@ -26,6 +26,7 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
   void set_flow_temp_set(sensor::Sensor *sensor);
   void set_flow_temp_actual(sensor::Sensor *sensor);
   void set_return_temp(sensor::Sensor *sensor);
+  void set_burner_state(binary_sensor::BinarySensor *sensor);  // New setter for burner status
 
  protected:
   // Pointers for original sensors
@@ -36,6 +37,7 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
   sensor::Sensor *flow_temp_set_{nullptr};
   sensor::Sensor *flow_temp_actual_{nullptr};
   sensor::Sensor *return_temp_{nullptr};
+  binary_sensor::BinarySensor *burner_state_{nullptr};  // New sensor pointer
 
   // Original command arrays (read commands)
   uint8_t hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};             // Hot Water Status
