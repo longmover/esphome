@@ -20,7 +20,6 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
 
   // Setters for the original sensor pointers
   void set_hot_water(binary_sensor::BinarySensor *sensor);
-  void set_central_heating_set_temp(sensor::Sensor *sensor);
   void set_hot_water_temp(sensor::Sensor *sensor);
   void set_boiler_status(text_sensor::TextSensor *sensor);
   void set_flow_temp_set(sensor::Sensor *sensor);
@@ -31,7 +30,6 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
  protected:
   // Pointers for original sensors
   binary_sensor::BinarySensor *hot_water_{nullptr};
-  sensor::Sensor *central_heating_set_temp_{nullptr};
   sensor::Sensor *hot_water_temp_{nullptr};
   text_sensor::TextSensor *boiler_status_{nullptr};
   sensor::Sensor *flow_temp_set_{nullptr};
@@ -41,7 +39,6 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
 
   // Original command arrays (read commands)
   uint8_t hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};             // Hot Water Status
-  uint8_t chSetTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x02, 0xD0};        // CH Set Temp
   uint8_t hwTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x16, 0x03, 0xCF};           // Hot Water Temp
   uint8_t boiler_status_command[7] = {0x07, 0x00, 0x00, 0x00, 0xAB, 0x01, 0xAE}; // Boiler Status
   uint8_t flowTempSet[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0xD2};       // Flow Temp Set

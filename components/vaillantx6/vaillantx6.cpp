@@ -23,13 +23,6 @@ void VaillantX6Component::update() {
       hot_water_->publish_state(false);
   }
   
-  if (central_heating_set_temp_) {
-    int val = getParm(chSetTemp, sizeof(chSetTemp));
-    ESP_LOGD(TAG, "CH Set Temp raw value: %d", val);
-    if (val >= 0)
-      central_heating_set_temp_->publish_state(val);
-  }
-  
   if (hot_water_temp_) {
     int val = getParm(hwTemp, sizeof(hwTemp));
     ESP_LOGD(TAG, "HW Temp raw value: %d", val);
@@ -79,7 +72,6 @@ void VaillantX6Component::update() {
 void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "VaillantX6 Component:");
   ESP_LOGCONFIG(TAG, "  Hot Water Sensor: %s", (hot_water_ ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  CH Set Temp Sensor: %s", (central_heating_set_temp_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  HW Temp Sensor: %s", (hot_water_temp_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Boiler Status Sensor: %s", (boiler_status_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
@@ -138,9 +130,6 @@ std::string VaillantX6Component::getBoilerStatusString(int status) {
 // Setters for original sensor pointers
 void VaillantX6Component::set_hot_water(binary_sensor::BinarySensor *sensor) {
   hot_water_ = sensor;
-}
-void VaillantX6Component::set_central_heating_set_temp(sensor::Sensor *sensor) {
-  central_heating_set_temp_ = sensor;
 }
 void VaillantX6Component::set_hot_water_temp(sensor::Sensor *sensor) {
   hot_water_temp_ = sensor;

@@ -13,7 +13,6 @@ CONFIG_SCHEMA = cv.Schema({
   cv.GenerateID(): cv.declare_id(VaillantX6Component),
   cv.GenerateID(CONF_UART_ID): cv.use_id(uart.UARTComponent),
   cv.Required("hot_water"): cv.use_id(binary_sensor.BinarySensor),
-  cv.Required("central_heating_set_temp"): cv.use_id(sensor.Sensor),
   cv.Required("hot_water_temp"): cv.use_id(sensor.Sensor),
   cv.Required("boiler_status"): cv.use_id(text_sensor.TextSensor),
   cv.Required("flow_temp_set"): cv.use_id(sensor.Sensor),
@@ -27,7 +26,6 @@ async def to_code(config):
   await cg.register_component(var, config)
   await uart.register_uart_device(var, config)
   cg.add(var.set_hot_water(await cg.get_variable(config["hot_water"])))
-  cg.add(var.set_central_heating_set_temp(await cg.get_variable(config["central_heating_set_temp"])))
   cg.add(var.set_hot_water_temp(await cg.get_variable(config["hot_water_temp"])))
   cg.add(var.set_boiler_status(await cg.get_variable(config["boiler_status"])))
   cg.add(var.set_flow_temp_set(await cg.get_variable(config["flow_temp_set"])))
