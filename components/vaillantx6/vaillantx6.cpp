@@ -80,7 +80,7 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ != nullptr ? "configured" : "not configured"));
 }
 
-int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
+int VaillantX6Component::getParm(byte *cmd, int lcmd) {
   write_array(cmd, lcmd);
   unsigned long start_time = millis();
   while (available() < 4 && (millis() - start_time < 500)) {
