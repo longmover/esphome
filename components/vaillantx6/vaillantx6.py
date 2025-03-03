@@ -16,7 +16,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Required("flow_temp_set"): cv.use_id(sensor.Sensor),
     cv.Required("flow_temp_actual"): cv.use_id(sensor.Sensor),
     cv.Required("return_temp"): cv.use_id(sensor.Sensor),
-}).extend(cv.polling_component_schema("2000")).extend(uart.UART_DEVICE_SCHEMA)
+}).extend(cv.polling_component_schema("2000ms")).extend(uart.UART_DEVICE_SCHEMA)
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
