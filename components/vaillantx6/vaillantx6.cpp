@@ -8,7 +8,7 @@ static const char *TAG = "vaillantx6.component";
 
 void VaillantX6Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up VaillantX6Component...");
-  // No additional setup is required.
+  this->set_update_interval(2000);  // Poll every 2 seconds
 }
 
 void VaillantX6Component::update() {
@@ -47,37 +47,46 @@ void VaillantX6Component::update() {
     }
   }
   
-  if (flow_temp_set_) {
+  if (flowTempSet) {
     int val = getParm(flowTempSet, sizeof(flowTempSet));
     ESP_LOGD(TAG, "Flow Temp Set raw value: %d", val);
     if (val >= 0)
       flow_temp_set_->publish_state(val);
   }
   
-  if (flow_temp_actual_) {
+  if (flowTempActual) {
     int val = getParm(flowTempActual, sizeof(flowTempActual));
     ESP_LOGD(TAG, "Flow Temp Actual raw value: %d", val);
     if (val >= 0)
       flow_temp_actual_->publish_state(val);
   }
   
-  if (return_temp_) {
+  if (returnTemp) {
     int val = getParm(returnTemp, sizeof(returnTemp));
     ESP_LOGD(TAG, "Return Temp raw value: %d", val);
     if (val >= 0)
       return_temp_->publish_state(val);
   }
+
+  // New: Boiler Pressure
+  if (boiler_pressure_) {
+    int val = getParm(boiler_pressure_cmd, sizeof(boiler_pressure_cmd));
+    ESP_LOGD(TAG, "Boiler Pressure raw value: %d", val);
+    if (val >= 0)
+      boiler_pressure_->publish_state(val);
+  }
 }
 
 void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "VaillantX6 Component:");
-  ESP_LOGCONFIG(TAG, "  Hot Water Sensor: %s", (hot_water_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  CH Set Temp Sensor: %s", (central_heating_set_temp_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  HW Temp Sensor: %s", (hot_water_temp_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Boiler Status Sensor: %s", (boiler_status_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ != nullptr ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ != nullptr ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Hot Water Sensor: %s", (hot_water_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  CH Set Temp Sensor: %s", (central_heating_set_temp_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  HW Temp Sensor: %s", (hot_water_temp_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Boiler Status Sensor: %s", (boiler_status_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
+  ESP_LOGCONFIG(TAG, "  Boiler Pressure Sensor: %s", (boiler_pressure_ ? "configured" : "not configured"));
 }
 
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
@@ -130,29 +139,26 @@ std::string VaillantX6Component::getBoilerStatusString(int status) {
 void VaillantX6Component::set_hot_water(binary_sensor::BinarySensor *sensor) {
   hot_water_ = sensor;
 }
-
 void VaillantX6Component::set_central_heating_set_temp(sensor::Sensor *sensor) {
   central_heating_set_temp_ = sensor;
 }
-
 void VaillantX6Component::set_hot_water_temp(sensor::Sensor *sensor) {
   hot_water_temp_ = sensor;
 }
-
 void VaillantX6Component::set_boiler_status(text_sensor::TextSensor *sensor) {
   boiler_status_ = sensor;
 }
-
 void VaillantX6Component::set_flow_temp_set(sensor::Sensor *sensor) {
   flow_temp_set_ = sensor;
 }
-
 void VaillantX6Component::set_flow_temp_actual(sensor::Sensor *sensor) {
   flow_temp_actual_ = sensor;
 }
-
 void VaillantX6Component::set_return_temp(sensor::Sensor *sensor) {
   return_temp_ = sensor;
+}
+void VaillantX6Component::set_boiler_pressure(sensor::Sensor *sensor) {
+  boiler_pressure_ = sensor;
 }
 
 }  // namespace vaillantx6
