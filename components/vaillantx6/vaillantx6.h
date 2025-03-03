@@ -36,7 +36,6 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
   sensor::Sensor *flow_temp_set_{nullptr};
   sensor::Sensor *flow_temp_actual_{nullptr};
   sensor::Sensor *return_temp_{nullptr};
-  sensor::Sensor *boiler_pressure_{nullptr};  // New sensor pointer
 
   // Original command arrays (using uint8_t)
   uint8_t hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};            // Hot Water Status
@@ -46,9 +45,6 @@ class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
   uint8_t flowTempSet[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0xD2};      // Flow Temp Set
   uint8_t flowTempActual[7] = {0x07, 0x00, 0x00, 0x00, 0x18, 0x00, 0xD0};   // Flow Temp Actual
   uint8_t returnTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x98, 0x00, 0xC9};       // Return Temp
-
-  // New command array for Boiler Pressure (example values)
-  uint8_t boiler_pressure_cmd[7] = {0x07, 0x00, 0x00, 0x00, 0x55, 0x01, 0xD3};
 
   // Helper function to send a command and get a parameter value
   int getParm(uint8_t *cmd, int lcmd);

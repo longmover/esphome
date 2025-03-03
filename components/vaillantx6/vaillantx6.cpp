@@ -68,13 +68,6 @@ void VaillantX6Component::update() {
       return_temp_->publish_state(val);
   }
 
-  // New: Boiler Pressure
-  if (boiler_pressure_) {
-    int val = getParm(boiler_pressure_cmd, sizeof(boiler_pressure_cmd));
-    ESP_LOGD(TAG, "Boiler Pressure raw value: %d", val);
-    if (val >= 0)
-      boiler_pressure_->publish_state(val);
-  }
 }
 
 void VaillantX6Component::dump_config() {
@@ -86,7 +79,6 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Boiler Pressure Sensor: %s", (boiler_pressure_ ? "configured" : "not configured"));
 }
 
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
@@ -156,9 +148,6 @@ void VaillantX6Component::set_flow_temp_actual(sensor::Sensor *sensor) {
 }
 void VaillantX6Component::set_return_temp(sensor::Sensor *sensor) {
   return_temp_ = sensor;
-}
-void VaillantX6Component::set_boiler_pressure(sensor::Sensor *sensor) {
-  boiler_pressure_ = sensor;
 }
 
 }  // namespace vaillantx6
