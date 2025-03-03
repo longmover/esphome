@@ -68,22 +68,6 @@ void VaillantX6Component::update() {
       return_temp_->publish_state(val);
   }
   
-  // New sensors:
-  
-  if (ch_pump_speed_) {
-    int val = getParm(ch_pump_speed_cmd, sizeof(ch_pump_speed_cmd));
-    ESP_LOGD(TAG, "CH Pump Speed raw value: %d", val);
-    if (val >= 0)
-      ch_pump_speed_->publish_state(val);
-  }
-  
- 
-  if (gas_flow_rate_) {
-    int val = getParm(gas_flow_rate_cmd, sizeof(gas_flow_rate_cmd));
-    ESP_LOGD(TAG, "Gas Flow Rate raw value: %d", val);
-    if (val >= 0)
-      gas_flow_rate_->publish_state(val);
-  }
 }
 
 void VaillantX6Component::dump_config() {
@@ -95,7 +79,6 @@ void VaillantX6Component::dump_config() {
   ESP_LOGCONFIG(TAG, "  Flow Temp Set Sensor: %s", (flow_temp_set_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Flow Temp Actual Sensor: %s", (flow_temp_actual_ ? "configured" : "not configured"));
   ESP_LOGCONFIG(TAG, "  Return Temp Sensor: %s", (return_temp_ ? "configured" : "not configured"));
-  ESP_LOGCONFIG(TAG, "  Gas Flow Rate Sensor: %s", (gas_flow_rate_ ? "configured" : "not configured"));
 }
 
 int VaillantX6Component::getParm(uint8_t *cmd, int lcmd) {
