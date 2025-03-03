@@ -1,7 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "esphome/components/uart/uart_device.h"
+#include "esphome/components/uart/uart.h"   // Correct UART include
 #include "esphome/components/binary_sensor/binary_sensor.h"
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/text_sensor/text_sensor.h"
@@ -12,7 +12,7 @@
 namespace esphome {
 namespace vaillantx6 {
 
-class VaillantX6Component : public PollingComponent, public UARTDevice {
+class VaillantX6Component : public PollingComponent, public uart::UARTDevice {
  public:
   void setup() override;
   void update() override;
@@ -36,16 +36,16 @@ class VaillantX6Component : public PollingComponent, public UARTDevice {
   sensor::Sensor *flow_temp_actual_{nullptr};
   sensor::Sensor *return_temp_{nullptr};
 
-  // Command arrays for UART communication
-  byte hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};
-  byte chSetTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x02, 0xD0};
-  byte hwTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x16, 0x03, 0xCF};
-  byte boiler_status_command[7] = {0x07, 0x00, 0x00, 0x00, 0xAB, 0x01, 0xAE};
-  byte flowTempSet[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0xD2};
-  byte flowTempActual[7] = {0x07, 0x00, 0x00, 0x00, 0x18, 0x00, 0xD0};
-  byte returnTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x98, 0x00, 0xC9};
+  // Command arrays for UART communication (using uint8_t instead of byte)
+  uint8_t hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};            // Hot Water Status
+  uint8_t chSetTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x02, 0xD0};       // Central Heating Set Temp
+  uint8_t hwTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x16, 0x03, 0xCF};          // Hot Water Temp
+  uint8_t boiler_status_command[7] = {0x07, 0x00, 0x00, 0x00, 0xAB, 0x01, 0xAE}; // Boiler Status
+  uint8_t flowTempSet[7] = {0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0xD2};      // Flow Temp Set
+  uint8_t flowTempActual[7] = {0x07, 0x00, 0x00, 0x00, 0x18, 0x00, 0xD0};   // Flow Temp Actual
+  uint8_t returnTemp[7] = {0x07, 0x00, 0x00, 0x00, 0x98, 0x00, 0xC9};       // Return Temp
 
-  int getParm(byte *cmd, int lcmd);
+  int getParm(uint8_t *cmd, int lcmd);
   std::string getBoilerStatusString(int status);
 };
 
