@@ -3,14 +3,12 @@ import esphome.config_validation as cv
 from esphome.const import CONF_ID, CONF_UART_ID
 from esphome.components import uart, binary_sensor, sensor, text_sensor
 
-# Ensure that these components are loaded before our component.
+# Ensure that sensor components are loaded
 DEPENDENCIES = ["binary_sensor", "sensor", "text_sensor"]
 AUTO_LOAD = ["binary_sensor", "sensor", "text_sensor"]
 
 vaillantx6_ns = cg.esphome_ns.namespace("vaillantx6")
-VaillantX6Component = vaillantx6_ns.class_(
-    "VaillantX6Component", cg.PollingComponent, uart.UARTDevice
-)
+VaillantX6Component = vaillantx6_ns.class_("VaillantX6Component", cg.PollingComponent, uart.UARTDevice)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(VaillantX6Component),
@@ -28,11 +26,10 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)
-    # Use cg.id_() to resolve the sensor IDs.
-    cg.add(var.set_hot_water(cg.id_(config["hot_water"])))
-    cg.add(var.set_central_heating_set_temp(cg.id_(config["central_heating_set_temp"])))
-    cg.add(var.set_hot_water_temp(cg.id_(config["hot_water_temp"])))
-    cg.add(var.set_boiler_status(cg.id_(config["boiler_status"])))
-    cg.add(var.set_flow_temp_set(cg.id_(config["flow_temp_set"])))
-    cg.add(var.set_flow_temp_actual(cg.id_(config["flow_temp_actual"])))
-    cg.add(var.set_return_temp(cg.id_(config["return_temp"])))
+    cg.add(var.set_hot_water(cg.get_variable(config["hot_water"])))
+    cg.add(var.set_central_heating_set_temp(cg.get_variable(config["central_heating_set_temp"])))
+    cg.add(var.set_hot_water_temp(cg.get_variable(config["hot_water_temp"])))
+    cg.add(var.set_boiler_status(cg.get_variable(config["boiler_status"])))
+    cg.add(var.set_flow_temp_set(cg.get_variable(config["flow_temp_set"])))
+    cg.add(var.set_flow_temp_actual(cg.get_variable(config["flow_temp_actual"])))
+    cg.add(var.set_return_temp(cg.get_variable(config["return_temp"])))
