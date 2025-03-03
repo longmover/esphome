@@ -2,12 +2,12 @@ An ESPHome external component to allow the reading of various sensor values/stat
 
 There are many potential values to read but not all will be supported by all boilers. This one returns:
 
-- Boiler Mode (Text sensor describing the current mode of the boiler)
-- Burner Status (Heat or normal)
-- Flow Temperature Set (Heating set temperature)
+- Boiler Mode _Text sensor describing the current mode of the boiler_
+- Burner Status
+- Flow Temperature Set
 - Flow Temperature Actual
 - Return Temperature
-- Hot Water Status: Heat or normal
+- Hot Water Status
 - Hot Water Temperature
 
 You will need to make up an interface cable using an RJ11 connector as follows:
