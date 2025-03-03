@@ -69,12 +69,6 @@ void VaillantX6Component::update() {
   }
   
   // New sensors:
-  if (burner_modulation_) {
-    int val = getParm(burner_modulation_cmd, sizeof(burner_modulation_cmd));
-    ESP_LOGD(TAG, "Burner Modulation raw value: %d", val);
-    if (val >= 0)
-      burner_modulation_->publish_state(val);
-  }
   
   if (ch_pump_speed_) {
     int val = getParm(ch_pump_speed_cmd, sizeof(ch_pump_speed_cmd));
@@ -83,13 +77,7 @@ void VaillantX6Component::update() {
       ch_pump_speed_->publish_state(val);
   }
   
-  if (gas_consumption_) {
-    int val = getParm(gas_consumption_cmd, sizeof(gas_consumption_cmd));
-    ESP_LOGD(TAG, "Gas Consumption raw value: %d", val);
-    if (val >= 0)
-      gas_consumption_->publish_state(val);
-  }
-  
+ 
   if (gas_flow_rate_) {
     int val = getParm(gas_flow_rate_cmd, sizeof(gas_flow_rate_cmd));
     ESP_LOGD(TAG, "Gas Flow Rate raw value: %d", val);
