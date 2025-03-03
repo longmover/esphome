@@ -1,5 +1,11 @@
 #pragma once
-#include "esphome.h"
+
+#include "esphome/core/component.h"
+#include "esphome/components/uart/uart_device.h"
+#include "esphome/components/binary_sensor/binary_sensor.h"
+#include "esphome/components/sensor/sensor.h"
+#include "esphome/components/text_sensor/text_sensor.h"
+
 #include <map>
 #include <string>
 
@@ -8,29 +14,27 @@ namespace vaillantx6 {
 
 class VaillantX6Component : public PollingComponent, public UARTDevice {
  public:
-  VaillantX6Component();
-
-  // Setters to assign sensor pointers from YAML
-  void set_hot_water(BinarySensor *sensor);
-  void set_central_heating_set_temp(Sensor *sensor);
-  void set_hot_water_temp(Sensor *sensor);
-  void set_boiler_status(TextSensor *sensor);
-  void set_flow_temp_set(Sensor *sensor);
-  void set_flow_temp_actual(Sensor *sensor);
-  void set_return_temp(Sensor *sensor);
-
   void setup() override;
   void update() override;
+  void dump_config() override;
+
+  // Setters for sensor pointers from YAML
+  void set_hot_water(binary_sensor::BinarySensor *sensor);
+  void set_central_heating_set_temp(sensor::Sensor *sensor);
+  void set_hot_water_temp(sensor::Sensor *sensor);
+  void set_boiler_status(text_sensor::TextSensor *sensor);
+  void set_flow_temp_set(sensor::Sensor *sensor);
+  void set_flow_temp_actual(sensor::Sensor *sensor);
+  void set_return_temp(sensor::Sensor *sensor);
 
  protected:
-  // Sensor pointers
-  BinarySensor *hot_water_;
-  Sensor *central_heating_set_temp_;
-  Sensor *hot_water_temp_;
-  TextSensor *boiler_status_;
-  Sensor *flow_temp_set_;
-  Sensor *flow_temp_actual_;
-  Sensor *return_temp_;
+  binary_sensor::BinarySensor *hot_water_{nullptr};
+  sensor::Sensor *central_heating_set_temp_{nullptr};
+  sensor::Sensor *hot_water_temp_{nullptr};
+  text_sensor::TextSensor *boiler_status_{nullptr};
+  sensor::Sensor *flow_temp_set_{nullptr};
+  sensor::Sensor *flow_temp_actual_{nullptr};
+  sensor::Sensor *return_temp_{nullptr};
 
   // Command arrays for UART communication
   byte hw[7] = {0x07, 0x00, 0x00, 0x00, 0x58, 0x01, 0x51};
